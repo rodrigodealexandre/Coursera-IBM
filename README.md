@@ -1,4 +1,4 @@
-# Portfolio Website - Final Project for Coursera IBM AI Developer Professional Certificate
+# Portfolio Website - Final Project for "Introduction to HTML, CSS, & JavaScript".
 
 This repository contains the final project for the course "Introduction to HTML, CSS, & JavaScript" as part of the IBM AI Developer Professional Certificate on Coursera.
 
