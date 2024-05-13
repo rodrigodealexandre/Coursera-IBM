@@ -1,3 +1,4 @@
+import uuid as uuid_module  # Renaming the module to avoid conflicts with other variables
 from flask import Flask, make_response, request
 app = Flask(__name__)
 
@@ -47,13 +48,55 @@ def name_search():
     for i in data:
         if i['first_name'].lower() == q.lower():
             resp = make_response(i)
-            resp.status_code = 400
+            resp.status_code = 200
             return resp
             
     resp = make_response({"404": "Person not found"})
     resp.status_code = 404
     return resp
         
+        
+@app.route("/count")
+def count():
+    return {"data count": len(data)}, 200
+
+@app.route("/person/<uuid>")
+def find_by_uuid(uuid):
+    try:
+        # Attempt to create a UUID object from the string
+        uuid_obj = uuid_module.UUID(uuid)
+        
+    except ValueError:
+        # If ValueError is raised, the string is not a valid UUID
+        resp = make_response({"422": "Invalid input parameter: Not a valid UUID"})
+        resp.status_code = 422
+        return resp
+
+    
+    for i in data:
+        if i['id'] == uuid:
+            resp = make_response(i)
+            resp.status_code = 200
+            return resp
+            
+    resp = make_response({"404": "UUID not found"})
+    resp.status_code = 404
+    return resp
+
+
+@app.route("/person/<uuid>", methods=['DELETE'])
+def delete_by_uuid(uuid):
+    for i in data:
+        if i['id'] == uuid:
+            resp = make_response({"Deleted": f"{uuid}"})
+            resp.status_code = 200
+            data.remove(i)
+            return resp
+            
+    resp = make_response({"404": "UUID not found"})
+    resp.status_code = 404
+    return resp
+
 data = [
     {
         "id": "3b58aade-8415-49dd-88db-8d7bce14932a",
