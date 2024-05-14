@@ -111,6 +111,13 @@ def add_by_uuid():
     resp.status_code = 404
     return resp
 
+@app.errorhandler(404)
+def api_not_found(error):
+    resp = make_response({"404": "API not found"})
+    resp.status_code = 404
+    return resp
+    
+
 data = [
     {
         "id": "3b58aade-8415-49dd-88db-8d7bce14932a",
