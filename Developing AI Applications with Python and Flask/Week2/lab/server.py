@@ -92,8 +92,22 @@ def delete_by_uuid(uuid):
             resp.status_code = 200
             data.remove(i)
             return resp
+
+@app.route("/person", methods=['POST'])
+def add_by_uuid():
+    if not request.json:
+        resp = make_response({"422": "Invalid input parameter"})
+        resp.status_code = 422
+        return resp
+
+    if request.json["id"] not in [d["id"] for d in data]:
+        data.append(request.json)
+        newaddid = request.json["id"]
+        resp = make_response({"Add": f"{newaddid}"})
+        resp.status_code = 200
+        return resp
             
-    resp = make_response({"404": "UUID not found"})
+    resp = make_response({"404": "UUID already exists"})
     resp.status_code = 404
     return resp
 
