@@ -23,7 +23,7 @@ def add_transaction():
     if request.method == "GET":
         return render_template('form.html')
     
-    elif request.method == "POST":
+    else:
         transation = {
           'id': len(transactions)+1,
           'date': request.form['date'],
@@ -31,18 +31,40 @@ def add_transaction():
          }
         
         transactions.append(transation)
-
+        
+        return redirect(url_for("get_transactions")) # `url_for(get_transactions)` `get_transactions` needs to be within quotation makrs.
 
 # Update operation
-@app.route("", methods=['POST'])
-def update():
-    pass
+@app.route("/edit/<int:transaction_id>", methods=['POST', 'GET'])
+def edit_transaction(transaction_id):
+    # if transaction_id in [transaction["id"] for transaction in transactions]: this method does not work since it only checks if true or false
+    if request.method == "GET":
+        for transaction in transactions:
+            if transaction['id'] == transaction_id:
+                return render_template("edit.html", transaction=transaction)
+        
+    else:
+        date = request.form['date']
+        amount = request.form['amount']
+        
+        for transaction in transactions:
+            if transaction['id'] == transaction_id:
+                transaction['date'] = date
+                transaction['amount'] = amount
+                break # add break so it stops when it finds the value after updated.
 
+        return redirect(url_for("get_transactions"))
+    
 # Delete operation
-@app.route("", methods=['DELETE'])
-def delete():
-    pass
+@app.route("/delete/<int:transaction_id>")
+def delete_transaction(transaction_id):
+    for transaction in transactions:
+        if transaction['id'] == transaction_id:
+            transactions.remove(transaction)
+            break
+    return redirect(url_for("get_transactions"))
 
+            
 # Run the Flask app
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    app.run(debug=True)
