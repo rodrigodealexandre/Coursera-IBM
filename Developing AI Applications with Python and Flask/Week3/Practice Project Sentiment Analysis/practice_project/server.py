@@ -19,16 +19,12 @@ def sent_analyzer():
     '''
     text_to_analyze = request.args.get('textToAnalyze')
     stored_text = sentiment_analyzer(text_to_analyze)
-    
     if stored_text['label'] is not None:
         status = stored_text['label'].split("_")[1]
         score = stored_text['score']
-    
         return f"The given text has been identified as {status} with a score of {score}."
-    
-    else:
-        return "Invalid input ! Try again."
 
+    return "Invalid input ! Try again."
 
 @app.route("/")
 def render_index_page():
