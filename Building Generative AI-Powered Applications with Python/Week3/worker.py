@@ -3,12 +3,10 @@ import requests
 
 openai_client = OpenAI()
 
-
 def speech_to_text(audio_binary):
-
     # Set up Watson Speech-to-Text HTTP Api url
     base_url = "https://sn-watson-tts.labs.skills.network"
-    api_url = base_url+'/speech-to-text/api/v1/recognize'
+    api_url = base_url + '/speech-to-text/api/v1/recognize'
 
     # Set up parameters for our HTTP reqeust
     params = {
@@ -23,11 +21,15 @@ def speech_to_text(audio_binary):
 
     # Parse the response to get our transcribed text
     text = 'null'
-    while bool(response.get('results')):
+    if 'results' in response and response['results']:
         print('speech to text response:', response)
-        text = response.get('results').pop().get('alternatives').pop().get('transcript')
-        print('recognised text: ', text)
-        return text
+        text = response['results'][0]['alternatives'][0]['transcript']
+        print('recognized text: ', text)
+    else:
+        print('No speech recognized or invalid response:', response)
+
+    return text
+
 
 def text_to_speech(text, voice=""):
     # Set up Watson Text-to-Speech HTTP Api url
