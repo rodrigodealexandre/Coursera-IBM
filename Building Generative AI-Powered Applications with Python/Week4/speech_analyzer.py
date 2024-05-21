@@ -12,10 +12,21 @@ from ibm_watson_machine_learning.metanames import GenTextParamsMetaNames as GenP
 from ibm_watson_machine_learning.foundation_models import Model
 
 #######------------- LLM-------------####
-
 # initiate LLM instance, this can be IBM WatsonX, huggingface, or OpenAI instance
-
-llm = ###---> write your code here
+my_credentials = {
+    "url"    : "https://us-south.ml.cloud.ibm.com"
+}
+params = {
+        GenParams.MAX_NEW_TOKENS: 800, # The maximum number of tokens that the model can generate in a single run.
+        GenParams.TEMPERATURE: 0.1,   # A parameter that controls the randomness of the token generation. A lower value makes the generation more deterministic, while a higher value introduces more randomness.
+    }
+LLAMA2_model = Model(
+        model_id= 'meta-llama/llama-2-70b-chat', 
+        credentials=my_credentials,
+        params=params,
+        project_id="skills-network",  
+        )
+llm = WatsonxLLM(LLAMA2_model)  
 
 #######------------- Prompt Template-------------####
 
@@ -42,8 +53,11 @@ prompt_to_LLAMA2 = LLMChain(llm=llm, prompt=pt)
 
 def transcript_audio(audio_file):
     # Initialize the speech recognition pipeline
-    
-    pipe = #------> write the code here
+    pipe = pipeline(
+        "automatic-speech-recognition",
+        model="openai/whisper-tiny.en",
+        chunk_length_s=30,
+    )
     
     # Transcribe the audio file and return the result
     transcript_txt = pipe(audio_file, batch_size=8)["text"]
@@ -58,6 +72,10 @@ audio_input = gr.Audio(sources="upload", type="filepath")
 output_text = gr.Textbox()
 
 # Create the Gradio interface with the function, inputs, and outputs
-iface = #---> write code here
+iface = gr.Interface(fn=transcript_audio, 
+                     inputs=audio_input, outputs=output_text, 
+                     title="Audio Transcription App",
+                     description="Upload the audio file")
+
 
 iface.launch(server_name="0.0.0.0", server_port=7860)
