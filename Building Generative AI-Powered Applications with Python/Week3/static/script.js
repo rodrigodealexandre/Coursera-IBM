@@ -94,10 +94,6 @@ const toggleRecording = async () => {
   } else {
     const audio = await recorder.stop();
     sleep(1000);
-
-    // Log the size of the audio data
-    console.log(`Audio data size: ${audio.audioBlob.size} bytes`);
-    
     return audio;
   }
 };
@@ -212,7 +208,6 @@ $(document).ready(function () {
     } else if (recording) {
       toggleRecording().then(async (userRecording) => {
         console.log("stop recording");
-        console.log(`Audio data size: ${userRecording.audioBlob.size} bytes`);
         await showUserLoadingAnimation();
         const userMessage = await getSpeechToText(userRecording);
         populateUserMessage(userMessage, userRecording);
@@ -223,10 +218,10 @@ $(document).ready(function () {
     } else {
       // Get the message the user typed in
       const message = cleanTextInput($("#message-input").val());
-  
+
       populateUserMessage(message, null);
       populateBotResponse(message);
-  
+
       $("#send-button")
         .removeClass("send")
         .addClass("microphone")

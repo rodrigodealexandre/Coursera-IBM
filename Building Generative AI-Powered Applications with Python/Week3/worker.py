@@ -12,32 +12,18 @@ def speech_to_text(audio_binary):
     params = {
         'model': 'en-US_Multimedia',  # Using the confirmed available model
     }
-
     headers = {
         'Content-Type': 'audio/webm'  # Ensure this matches your audio data format
     }
 
-    print(f"Sending audio data of length: {len(audio_binary)} bytes")
-
     # Send an HTTP POST request
-    response = requests.post(api_url, params=params, headers=headers, data=audio_binary)
-    
-    # Check if the response is JSON and parse it
-    try:
-        response_json = response.json()
-    except ValueError:
-        print("Invalid response format, not JSON")
-        return "null"
-    
-    # Log and parse the response to get our transcribed text
-    print('Response from Watson:', response_json)
-    text = 'null'
-    if 'results' in response_json and response_json['results']:
-        text = response_json['results'][0]['alternatives'][0]['transcript']
-        print('Recognized text:', text)
-    else:
-        print('No speech recognized or invalid response:', response_json)
+    response = requests.post(api_url, params=params, headers=headers, data=audio_binary).json()
 
+    # Parse the response to get our transcribed text
+    text = 'null'
+    if 'results' in response and response['results']:
+        text = response['results'][0]['alternatives'][0]['transcript']
+        print('Recognized text:', text)
     return text
 
 def text_to_speech(text, voice=""):
