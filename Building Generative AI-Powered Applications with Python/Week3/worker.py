@@ -4,32 +4,41 @@ import requests
 openai_client = OpenAI()
 
 def speech_to_text(audio_binary):
-    # Set up Watson Speech-to-Text HTTP Api url
-    base_url = "https://sn-watson-tts.labs.skills.network"
+    # Set up Watson Speech-to-Text HTTP API URL
+    base_url = "https://sn-watson-stt.labs.skills.network"
     api_url = base_url + '/speech-to-text/api/v1/recognize'
 
-    # Set up parameters for our HTTP reqeust
+    # Set up parameters for our HTTP request
     params = {
-        'model': 'en-US_Multimedia',
+        'model': 'en-US_Multimedia',  # Using the confirmed available model
     }
 
-    # Set up the body of our HTTP request
-    body = audio_binary
+    headers = {
+        'Content-Type': 'audio/webm'  # Ensure this matches your audio data format
+    }
 
-    # Send a HTTP Post request
-    response = requests.post(api_url, params=params, data=audio_binary).json()
+    print(f"Sending audio data of length: {len(audio_binary)} bytes")
 
-    # Parse the response to get our transcribed text
+    # Send an HTTP POST request
+    response = requests.post(api_url, params=params, headers=headers, data=audio_binary)
+    
+    # Check if the response is JSON and parse it
+    try:
+        response_json = response.json()
+    except ValueError:
+        print("Invalid response format, not JSON")
+        return "null"
+    
+    # Log and parse the response to get our transcribed text
+    print('Response from Watson:', response_json)
     text = 'null'
-    if 'results' in response and response['results']:
-        print('speech to text response:', response)
-        text = response['results'][0]['alternatives'][0]['transcript']
-        print('recognized text: ', text)
+    if 'results' in response_json and response_json['results']:
+        text = response_json['results'][0]['alternatives'][0]['transcript']
+        print('Recognized text:', text)
     else:
-        print('No speech recognized or invalid response:', response)
+        print('No speech recognized or invalid response:', response_json)
 
     return text
-
 
 def text_to_speech(text, voice=""):
     # Set up Watson Text-to-Speech HTTP Api url
