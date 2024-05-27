@@ -1,34 +1,33 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const bodyParser = require('body-parser');
-const userRoutes = require('./routes/userRoutes');
+// src/controllers/userController.js
+const { registerUser, loginUser, getUserProfile } = require('../services/userService');
 
-dotenv.config();
+const register = async (req, res) => {
+  try {
+    const user = await registerUser(req.body);
+    res.status(201).json(user);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const { user, token } = await loginUser(email, password);
+    res.status(200).json({ user, token });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
 
-// Middleware
-app.use(bodyParser.json());
+const profile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await getUserProfile(userId);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
 
-// Routes
-app.use('/users', userRoutes);
-
-// Root route
-app.get('/', (req, res) => {
-    res.send('Welcome to the User Management Service API');
-});
-
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
-    console.log('MongoDB connected');
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
-    });
-}).catch((error) => {
-    console.error('MongoDB connection error:', error);
-});
+module.exports = { register, login, profile };
