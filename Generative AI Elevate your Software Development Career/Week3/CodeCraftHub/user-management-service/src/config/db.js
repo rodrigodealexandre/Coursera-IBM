@@ -9,6 +9,9 @@ dotenv.config();
 /**
  * Connect to MongoDB database.
  * Logs success or error message upon connection attempt.
+ * @async
+ * @function connectDB
+ * @returns {Promise<void>}
  */
 const connectDB = async () => {
   try {

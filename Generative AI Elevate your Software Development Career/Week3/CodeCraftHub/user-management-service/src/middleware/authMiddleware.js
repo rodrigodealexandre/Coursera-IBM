@@ -10,6 +10,10 @@ dotenv.config();
  * Middleware to authenticate requests using JWT.
  * If a valid token is provided, the user is authenticated and allowed to proceed.
  * Otherwise, an error response is sent.
+ * @function authMiddleware
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @param {Function} next - Express next middleware function.
  */
 const authMiddleware = (req, res, next) => {
   const token = req.header('Authorization').replace('Bearer ', '');

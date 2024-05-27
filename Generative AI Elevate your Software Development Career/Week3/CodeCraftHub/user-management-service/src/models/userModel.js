@@ -1,8 +1,13 @@
-// src/models/userModel
+// src/models/userModel.js
 // Import mongoose for MongoDB interaction
 const mongoose = require('mongoose');
 
-// Define user schema
+/**
+ * Defines the schema for user data.
+ * @const {Schema} userSchema
+ * @property {String} username - The username of the user. Required and must be unique.
+ * @property {String} password - The password of the user. Required.
+ */
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -15,7 +20,10 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// Create User model based on the schema
+/**
+ * Creates a User model based on the userSchema.
+ * @const {Model} User
+ */
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
