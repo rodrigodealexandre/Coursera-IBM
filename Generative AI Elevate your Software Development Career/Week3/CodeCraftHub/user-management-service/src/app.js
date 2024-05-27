@@ -1,3 +1,4 @@
+// src/app.js
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
@@ -13,7 +14,7 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
 
 // Routes
-app.use('/api/users', userRoutes);
+app.use('/users', userRoutes);
 
 // Root route
 app.get('/', (req, res) => {
