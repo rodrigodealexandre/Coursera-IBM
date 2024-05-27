@@ -1,9 +1,15 @@
 // src/config/db.js
+// Import required modules
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
+// Load environment variables from .env file
 dotenv.config();
 
+/**
+ * Connect to MongoDB database.
+ * Logs success or error message upon connection attempt.
+ */
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
@@ -12,7 +18,7 @@ const connectDB = async () => {
     });
     console.log('MongoDB connected');
   } catch (err) {
-    console.error(err.message);
+    console.error('MongoDB connection error:', err.message);
     process.exit(1);
   }
 };

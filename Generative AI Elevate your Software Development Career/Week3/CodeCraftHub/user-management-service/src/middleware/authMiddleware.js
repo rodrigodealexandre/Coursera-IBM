@@ -1,9 +1,16 @@
 // src/middleware/authMiddleware.js
+// Import required modules
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 
+// Load environment variables from .env file
 dotenv.config();
 
+/**
+ * Middleware to authenticate requests using JWT.
+ * If a valid token is provided, the user is authenticated and allowed to proceed.
+ * Otherwise, an error response is sent.
+ */
 const authMiddleware = (req, res, next) => {
   const token = req.header('Authorization').replace('Bearer ', '');
   if (!token) {

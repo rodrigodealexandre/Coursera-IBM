@@ -1,19 +1,22 @@
 // src/app.js
+// Import required modules
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const userRoutes = require('./routes/userRoutes');
 
+// Load environment variables from .env file
 dotenv.config();
 
+// Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+// Middleware to parse JSON bodies
 app.use(bodyParser.json());
 
-// Routes
+// Routes for user-related endpoints
 app.use('/users', userRoutes);
 
 // Root route
@@ -21,7 +24,7 @@ app.get('/', (req, res) => {
   res.send('Welcome to the User Management Service API');
 });
 
-// Connect to MongoDB
+// Connect to MongoDB and start the server
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

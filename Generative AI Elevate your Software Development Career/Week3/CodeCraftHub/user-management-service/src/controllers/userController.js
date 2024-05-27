@@ -1,9 +1,13 @@
 // src/controllers/userController.js
+// Import required modules
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-// User registration
+/**
+ * Register a new user.
+ * Hashes the password before saving to the database.
+ */
 exports.registerUser = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -27,7 +31,10 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-// User login
+/**
+ * Login an existing user.
+ * Validates the username and password, then generates a JWT token.
+ */
 exports.loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -53,7 +60,10 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-// User profile management
+/**
+ * Update the user's profile.
+ * Changes the username based on the provided new username.
+ */
 exports.updateUserProfile = async (req, res) => {
   try {
     const { username } = req.params;
