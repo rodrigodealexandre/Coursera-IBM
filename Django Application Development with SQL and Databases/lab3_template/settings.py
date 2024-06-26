@@ -1,11 +1,11 @@
-# PostgreSQL
+# Postgre SQL
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': '#Replace it with the generated password in Step 1#',
-        'HOST': 'localhost',
+        'PASSWORD': 'postgres',
+        'HOST': '192.168.0.12',
         'PORT': '5432',
     }
 }
